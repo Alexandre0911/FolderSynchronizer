@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-import headers
 import hashlib
 import filecmp
 import datetime
@@ -151,8 +150,6 @@ def findModified():
         - Prints every file present in TARGET that has is not indentical to it's SOURCE similar file
     """
 
-    compareFilesDirs() # dcmp = dircmp(source, target) - As previously mentioned, used now as an arg for this func
-
     # Printing Modified File Names:
     counter = 1
     printColor("Modified Files: ")
@@ -282,6 +279,21 @@ def windowsCopyFiles():
 
         logToConsoleAndFile(currentTime, outputFileName, message)
 
+def windowsUpdateFiles():
+
+    print("\nUpdating File(s) in TARGET:\n")
+
+    for _file in modifiedFiles:
+
+        _source = _file.source.replace("/", "\\")
+        _target = _file.destination.replace("/", "\\")
+
+        os.system(f'copy "{_source}" "{_target}" /y')
+            
+        message = f'File "{_file.name}" successfully updated.\n\n'
+
+        logToConsoleAndFile(currentTime, outputFileName, message)
+
 # Removing, from TARGET, DIRS and FILES missing in SOURCE
 def windowsRemoveDirs():
 
@@ -343,11 +355,14 @@ while True:
 
     compareFilesDirs(dcmp)
 
-    # Printing Files and Directories Found Only In SOURCE
+    # Printing Files Which Are Common Between SOURCE and TARGET But Have Modified Data
+    findModified()
+
+    # Printing Files And Directories Found Only In SOURCE
     foundFiles(filesInSource, 'source')
     foundDirs(dirsInSource, 'source')
 
-    # Printing Files and Directories Found Only In TARGET
+    # Printing Files And Directories Found Only In TARGET
     foundFiles(filesInTarget, 'target')
     foundDirs(dirsInTarget, 'target')
 
@@ -380,8 +395,11 @@ while True:
     if len(dirsInTarget) > 0:   # Check for DIRS present ONLY in TARGET
         windowsRemoveDirs()
 
-    if len(filesInTarget) > 0:   # Check for FILES present ONLY in TARGET
+    if len(filesInTarget) > 0:  # Check for FILES present ONLY in TARGET
         windowsRemoveFiles()
+
+    if len(modifiedFiles) > 0:  # Checks for modified FILES
+        windowsUpdateFiles()
 
 
 

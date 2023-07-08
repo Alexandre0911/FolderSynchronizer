@@ -150,8 +150,6 @@ def findModified():
         - Prints every file present in TARGET that has is not indentical to it's SOURCE similar file
     """
 
-    compareFilesDirs() # dcmp = dircmp(source, target) - As previously mentioned, used now as an arg for this func
-
     # Printing Modified File Names:
     counter = 1
     printColor("Modified Files: ")
@@ -274,6 +272,18 @@ def linuxCopyFiles():
 
         logToConsoleAndFile(currentTime, outputFileName, message) # TODO -> CHECK IF THIS WORKS, GO TO KALI
 
+def linuxUpdateFiles():
+
+    print("\nUpdating File(s) in TARGET:\n")
+
+    for _file in modifiedFiles:
+
+        os.system(f'cp "{_file.source}" "{_file.destination}"')
+            
+        message = f'File "{_file.source}" successfully updated.\n\n'
+
+        logToConsoleAndFile(currentTime, outputFileName, message)
+
 # Removing, from TARGET, DIRS & FILES missing in SOURCE
 def linuxRemoveDirs():
 
@@ -357,8 +367,15 @@ while True:
     if len(dirsInTarget) > 0:   # Check for DIRS present ONLY in TARGET
         linuxRemoveDirs()
 
+    if len(modifiedFiles) > 0:  # Checks for modified FILES
+        linuxUpdateFiles()
+
+
+
     # Unlike in Windows, Linux will think that a FILE is a DIR if they have "" around it
     # For example "example_file.txt"
     # I use the "" method so the program knows what to do if there is a special char in a FILE or DIR 
+
+
 
     time.sleep(syncInterval)    # Interval (In Seconds) Between Each Attempt Folder Synchronization
