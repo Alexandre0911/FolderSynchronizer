@@ -237,13 +237,13 @@ def md5(fileName: str):
     """
 
     try:
-        with open(fileName, "rb") as f:
-            fileContent = f.read()
-            hash = hashlib.md5(fileContent)
+        with open(fileName, "rb") as _file:
+            fileContent = _file.read()
+            _hash = hashlib.md5(fileContent)
     except:
         deletedDirs.append(fileName)
 
-    return hash.hexdigest()
+    return _hash.hexdigest()
 
 
 
