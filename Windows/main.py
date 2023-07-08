@@ -86,8 +86,8 @@ def trimSlash(inputSource: str):
 source = str(sys.argv[1])
 target = str(sys.argv[2])
 
-source = trimSlash(source).replace('/', '\\')
-target = trimSlash(target).replace('/', '\\')
+source = trimSlash(source)
+target = trimSlash(target)
 
 outputFileName = sys.argv[3]
 syncInterval = int(sys.argv[4])
@@ -237,13 +237,13 @@ def md5(fileName: str):
     """
 
     try:
-        with open(fileName, "rb") as file:
-            fileContent = file.read()
-            hash = hashlib.md5(fileContent)
+        with open(fileName, "rb") as _file:
+            fileContent = _file.read()
+            _hash = hashlib.md5(fileContent)
     except:
         deletedDirs.append(fileName)
 
-    return hash.hexdigest()
+    return _hash.hexdigest()
 
 
 
